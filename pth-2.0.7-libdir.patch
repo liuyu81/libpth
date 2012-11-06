@@ -1,0 +1,27 @@
+diff -u4 pth-2.0.7/configure.ac pth-2.0.7-2/configure.ac
+--- pth-2.0.7/configure.ac	2006-06-08 17:54:01.000000000 +0000
++++ pth-2.0.7-2/configure.ac	2012-11-06 20:27:02.413976918 +0000
+@@ -124,8 +124,23 @@
+         CPPFLAGS="$CPPFLAGS '-Dvolatile=/**/'";
+         ;;
+ esac
+ 
++dnl ## check for libdir
++AC_SUBST([AC_MULTI_LIBDIR], ["."])
++if test "x$GCC" == xyes; then
++    AC_MULTI_LIBDIR=`$CC -print-multi-os-directory $CFLAGS`
++fi
++
++if test "$libdir" == '${exec_prefix}/lib'; then
++    case "$AC_MULTI_LIBDIR" in
++        /* | ../../* | .) libdir="lib" ;;
++        ../*)             libdir=`echo $AC_MULTI_LIBDIR | $SED 's/^...//' ` ;;
++        *)                libdir="lib/$AC_MULTI_LIBDIR" ;;
++    esac
++    libdir='${exec_prefix}/'$libdir
++fi
++
+ dnl ##
+ dnl ##   MANDATORY PLATFORM ENVIRONMENT
+ dnl ##
+ 

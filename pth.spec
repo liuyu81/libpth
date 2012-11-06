@@ -29,7 +29,6 @@
 #   pth-1.X.Y.tar.gz' command to build binary RPM packages from a Pth
 #   distribution tarball.
 
-%define prefix /usr/local
 %define ver 2.0.7
 %define rel 2
 
@@ -42,7 +41,9 @@ URL:        http://www.gnu.org/software/pth/
 Summary:    GNU Pth - The GNU Portable Threads
 
 Source:     ftp://ftp.gnu.org/gnu/pth/pth-%{ver}.tar.gz
-BuildRoot:  /tmp/pth-%{ver}-root
+Patch1:     pth-2.0.7-libdir.patch
+Prefix:     %{_prefix}
+BuildRoot:  %{_tmppath}/%{name}-%{version}-build
 
 %description
 Pth is a very portable POSIX/ANSI-C based library for Unix platforms which
@@ -78,13 +79,12 @@ Headers, static libraries, and documentation for GNU Portable Threads.
 %setup
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix} --enable-optimize --enable-pthread
+CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{_prefix} --libdir=%{_libdir} --enable-optimize --enable-pthread
 make
 make test
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install prefix=$RPM_BUILD_ROOT%{prefix}
+make install prefix=$RPM_BUILD_ROOT%{_prefix} libdir=$RPM_BUILD_ROOT%{_libdir} mandir=$RPM_BUILD_ROOT%{_mandir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -96,17 +96,24 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS COPYING ChangeLog HACKING HISTORY INSTALL NEWS PORTING README SUPPORT TESTS THANKS USERS
-%{prefix}/lib/libpth*.so
-%{prefix}/lib/libpth*.so.*
+%{_libdir}/libpth.so
+%{_libdir}/libpth.so.*
+%{_libdir}/libpthread.so
+%{_libdir}/libpthread.so.*
 
 %files devel
 %defattr(-,root,root)
-%{prefix}/bin/pth*-config
-%{prefix}/include/pth.h
-%{prefix}/include/pthread.h
-%{prefix}/lib/libpth*.a
-%{prefix}/lib/libpth*.la
-%{prefix}/man/man1/*.1
-%{prefix}/man/man3/*.3
-%{prefix}/share/aclocal/pth.m4
+%{_bindir}/pth-config
+%{_bindir}/pthread-config
+%{_includedir}/pth.h
+%{_includedir}/pthread.h
+%{_libdir}/libpth.a
+%{_libdir}/libpth.la
+%{_libdir}/libpthread.a
+%{_libdir}/libpthread.la
+%{_mandir}/man1/pth-config.1*
+%{_mandir}/man1/pthread-config.1*
+%{_mandir}/man3/pth.3*
+%{_mandir}/man3/pthread.3*
+%{_datadir}/aclocal/pth.m4
 
