@@ -96,15 +96,16 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS COPYING ChangeLog HACKING HISTORY INSTALL NEWS PORTING README SUPPORT TESTS THANKS USERS
-%{prefix}/lib/libpth.so
-%{prefix}/lib/libpth.so.*
+%{prefix}/lib/libpth*.so
+%{prefix}/lib/libpth*.so.*
 
 %files devel
 %defattr(-,root,root)
-%{prefix}/bin/pth-config
+%{prefix}/bin/pth*-config
 %{prefix}/include/pth.h
-%{prefix}/lib/libpth.a
-%{prefix}/lib/libpth.la
+%{prefix}/include/pthread.h
+%{prefix}/lib/libpth*.a
+%{prefix}/lib/libpth*.la
 %{prefix}/man/man1/*.1
 %{prefix}/man/man3/*.3
 %{prefix}/share/aclocal/pth.m4
