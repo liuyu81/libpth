@@ -84,6 +84,7 @@ make
 make test
 
 %install
+rm -rf $RPM_BUILD_ROOT
 make install prefix=$RPM_BUILD_ROOT%{_prefix} libdir=$RPM_BUILD_ROOT%{_libdir} mandir=$RPM_BUILD_ROOT%{_mandir}
 
 %clean
